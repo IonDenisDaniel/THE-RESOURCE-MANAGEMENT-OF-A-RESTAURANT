@@ -1,0 +1,1269 @@
+#include<iostream>
+using namespace std;
+
+class Comanda {
+private:
+	const int numarMasa;
+	int nrProduseComanda;
+	string* produseComanda;
+	float costComanda;
+public:
+	Comanda(int numarMasa) :numarMasa(numarMasa) {
+		this->nrProduseComanda = 0;
+		this->produseComanda = nullptr;
+		costComanda = 0;
+	}
+	Comanda(int numarMasa, int nrProduseComanda, string* produseComanda, float costComanda) :numarMasa(numarMasa) {
+		if (nrProduseComanda > 0 && produseComanda != nullptr) {
+			this->nrProduseComanda = nrProduseComanda;
+			this->produseComanda = new string[this->nrProduseComanda];
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				this->produseComanda[i] = produseComanda[i];
+			}
+		}
+		else {
+			this->nrProduseComanda = 0;
+			this->produseComanda = nullptr;
+		}
+		this->costComanda = costComanda;
+	};
+
+	int getNumarMasa() {
+		return this->numarMasa;
+	}
+	int getNrProduseComanda() {
+		return this->nrProduseComanda;
+	}
+	string* getProduseComanda() {
+		return this->produseComanda;
+	}
+	void setNrProduseSiProduse(int nrProduseComanda, string* produseComanda) {
+		if (nrProduseComanda > 0 && produseComanda != nullptr) {
+			this->nrProduseComanda = nrProduseComanda;
+			this->produseComanda = new string[this->nrProduseComanda];
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				this->produseComanda[i] = produseComanda[i];
+			}
+		}
+		else {
+			this->nrProduseComanda = 0;
+			this->produseComanda = nullptr;
+		}
+	}
+	float getCostComanda() {
+		return this->costComanda;
+	}
+	void setCostComanda(float costComanda) {
+		this->costComanda = costComanda;
+	}
+
+	void afisareInformatiiComanda() {
+		cout << "\n--------------------Informatii comanda-----------------------";
+		cout << "\nNumarul mesei l-a care a fost inregistrata comanda: " << this->numarMasa;
+		if (this->nrProduseComanda > 0 && this->produseComanda != nullptr) {
+			cout << "\nProduse comanda: ";
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				cout << "\nProdusul " << i + 1 << ":" << this->produseComanda[i];
+			}
+			cout << "\nCostul comenzii: " << this->costComanda;
+		}
+		else {
+			cout << "\nIn comanda nu s-au inregistrat inca produse!";
+			cout << "\nCostul comenzii: 0";
+		}
+	}
+
+	void modificaProduseComanda(int nrProduseComanda, string* produseComanda) {
+		delete[]this->produseComanda;
+		this->produseComanda = nullptr;
+		if (nrProduseComanda > 0 && produseComanda != nullptr) {
+			this->nrProduseComanda = nrProduseComanda;
+			this->produseComanda = new string[this->nrProduseComanda];
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				this->produseComanda[i] = produseComanda[i];
+			}
+		}
+		else {
+			this->nrProduseComanda = 0;
+			this->produseComanda = nullptr;
+		}
+	}
+
+	Comanda(const Comanda& model) :numarMasa(model.numarMasa) {
+		if (model.nrProduseComanda > 0 && model.produseComanda != nullptr) {
+			this->nrProduseComanda = model.nrProduseComanda;
+			this->produseComanda = new string[this->nrProduseComanda];
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				this->produseComanda[i] = model.produseComanda[i];
+			}
+		}
+		this->costComanda = model.costComanda;
+	}
+
+	Comanda& operator=(const Comanda& model) {
+		if (this != &model) {
+			delete[]this->produseComanda;
+			this->produseComanda = nullptr;
+			if (model.nrProduseComanda > 0 && model.produseComanda != nullptr) {
+				this->nrProduseComanda = model.nrProduseComanda;
+				this->produseComanda = new string[this->nrProduseComanda];
+				for (int i = 0; i < this->nrProduseComanda; i++) {
+					this->produseComanda[i] = model.produseComanda[i];
+				}
+			}
+			else {
+				this->nrProduseComanda = 0;
+				this->produseComanda = nullptr;
+			}
+			this->costComanda = model.costComanda;
+		}
+		return *this;
+	}
+
+	~Comanda() {
+		delete[]this->produseComanda;
+		this->produseComanda = nullptr;
+	}
+
+	friend ostream& operator<<(ostream& COUT, const Comanda& comanda) {
+		COUT << "\n----------------------Informatii comanda---------------------";
+		COUT << "\nNumarul mesei la care a fost inregsitrata comanda: " << comanda.numarMasa;
+		COUT << "\nProduse:";
+		if (comanda.nrProduseComanda > 0 && comanda.produseComanda != nullptr) {
+			for (int i = 0; i < comanda.nrProduseComanda; i++) {
+				COUT << "\nProdus " << i + 1 << ": " << comanda.produseComanda[i] << ";";
+			}
+		}
+		else {
+			COUT << "\nIn aceasta comanda nu au fost inca inregistrate produse";
+		}
+		COUT << "\nCostul comenzii: " << comanda.costComanda;
+		return COUT;
+	}
+
+	friend istream& operator>>(istream& CIN, Comanda& comanda) {
+		delete[]comanda.produseComanda;
+		comanda.produseComanda = nullptr;
+		cout << "\nIntroduceti datele comenzii inregistrate la masa cu numarul " << comanda.numarMasa << ":";
+		cout << "\nIntroduceti numarul de produse din comanda: ";
+		CIN >> comanda.nrProduseComanda;
+		if (comanda.nrProduseComanda > 0) {
+			cout << "\nIntroduceti produsele din comanda: ";
+			comanda.produseComanda = new string[comanda.nrProduseComanda];
+			for (int i = 0; i < comanda.nrProduseComanda; i++) {
+				cout << "\nProdusul " << i + 1 << ":";
+				CIN >> comanda.produseComanda[i];
+			}
+			cout << "\nIntroduceti costul comenzii: ";
+			CIN >> comanda.costComanda;
+		}
+		else {
+			comanda.nrProduseComanda = 0;
+			comanda.produseComanda = nullptr;
+			comanda.costComanda = 0;
+		}
+		return CIN;
+	};
+
+
+	//compara preturile a 2 comenzi
+	bool operator>=(const Comanda& comanda)const {
+		if (this->costComanda >= comanda.costComanda)
+			return true;
+		return false;
+	}
+	//vom compara doua comenzi din punct de vedere al preparatelor si al costului.Numar de masa al comenzii va fi mreu diferit
+	bool operator==(const Comanda& comanda) {
+		if (this->nrProduseComanda != comanda.nrProduseComanda)
+			return false;
+		else
+			for (int i = 0; i < this->nrProduseComanda; i++) {
+				if (this->produseComanda[i] != comanda.produseComanda[i])
+					return false;
+			}
+		if (this->costComanda != comanda.costComanda)
+			return false;
+		return true;
+	}
+
+	bool operator()(float cost) {
+		if (cost > 0) {
+			if (this->costComanda == cost)
+				return true;
+		}return false;
+	}
+
+	bool operator!() {
+		if (this->produseComanda == nullptr)
+			return true;
+		return false;
+	}
+
+	void operator+(float pret) {
+		this->costComanda += pret;
+	}
+};
+
+class materiiPrime {
+private:
+	string categorie;
+	int nrMateriiPrime;
+	string* listaMateriiPrime;
+	int* cantitati;
+public:
+	materiiPrime() {
+		this->categorie = "";
+		this->nrMateriiPrime = 0;
+		this->listaMateriiPrime = nullptr;
+		this->cantitati = nullptr;
+	}
+	materiiPrime(string categorie) {
+		this->categorie = categorie;
+		this->nrMateriiPrime = 0;
+		this->listaMateriiPrime = nullptr;
+		this->cantitati = nullptr;
+	}
+
+	materiiPrime(string categorie, int nrMateriiPrime, string* listaMateriiPrime, int* cantitati) {
+		this->categorie = categorie;
+		if (nrMateriiPrime > 0 && listaMateriiPrime != nullptr && cantitati != nullptr) {
+			this->nrMateriiPrime = nrMateriiPrime;
+			this->listaMateriiPrime = new string[this->nrMateriiPrime];
+			this->cantitati = new int[this->nrMateriiPrime];
+			for (int i = 0; i < this->nrMateriiPrime; i++) {
+				this->listaMateriiPrime[i] = listaMateriiPrime[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrMateriiPrime = 0;
+			this->listaMateriiPrime = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+
+	string getCategorie() {
+		return this->categorie;
+	}
+	void setCategorie(string categorie) {
+		this->categorie = categorie;
+	}
+	int getNrMateriiPrime() {
+		return this->nrMateriiPrime;
+	}
+	string* getListaMateriiprime() {
+		return this->listaMateriiPrime;
+	}
+	int* getCantitati() {
+		return this->cantitati;
+	}
+	void setMateriiPrimePlusCantitati(int nrMateriiPrime, string* listaMateriiPrime, int* cantitati) {
+		if (nrMateriiPrime > 0 && listaMateriiPrime != nullptr && cantitati != nullptr) {
+			this->nrMateriiPrime = nrMateriiPrime;
+			this->listaMateriiPrime = new string[this->nrMateriiPrime];
+			this->cantitati = new int[this->nrMateriiPrime];
+			for (int i = 0; i < this->nrMateriiPrime; i++) {
+				this->listaMateriiPrime[i] = listaMateriiPrime[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrMateriiPrime = 0;
+			this->listaMateriiPrime = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+	void afisareMateriiPrime() {
+		cout << "\n------------------------Afisare materii prime-----------------------------";
+		cout << "\nCategorie: " << this->categorie;
+		if (this->nrMateriiPrime > 0 && this->listaMateriiPrime != nullptr && this->cantitati != nullptr)
+			for (int i = 0; i < this->nrMateriiPrime; i++) {
+				cout << "\nMateria prima " << i + 1 << ": " << this->listaMateriiPrime[i] << "; Cantitate: " << this->cantitati[i];
+			}
+		else {
+			cout << "\nNu s-au inregistrat inca materii prime in aceasta categorie!";
+		}
+	}
+
+	void modificareMateriiPrime(int nrMateriiPrime, string* listaMateriiPrime, int* cantitati) {
+		delete[]this->listaMateriiPrime;
+		this->listaMateriiPrime = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+		if (nrMateriiPrime > 0 && listaMateriiPrime != nullptr && cantitati != nullptr) {
+			this->nrMateriiPrime = nrMateriiPrime;
+			this->listaMateriiPrime = new string[this->nrMateriiPrime];
+			this->cantitati = new int[this->nrMateriiPrime];
+			for (int i = 0; i < this->nrMateriiPrime; i++) {
+				this->listaMateriiPrime[i] = listaMateriiPrime[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrMateriiPrime = 0;
+			this->listaMateriiPrime = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+
+	materiiPrime(const materiiPrime& model) {
+		this->categorie = model.categorie;
+		if (model.nrMateriiPrime > 0 && model.listaMateriiPrime != nullptr && model.cantitati != nullptr) {
+			this->nrMateriiPrime = model.nrMateriiPrime;
+			this->listaMateriiPrime = new string[this->nrMateriiPrime];
+			this->cantitati = new int[this->nrMateriiPrime];
+			for (int i = 0; i < this->nrMateriiPrime; i++) {
+				this->listaMateriiPrime[i] = model.listaMateriiPrime[i];
+				this->cantitati[i] = model.cantitati[i];
+			}
+		}
+	}
+
+	materiiPrime& operator=(const materiiPrime& model) {
+		if (this != &model) {
+			this->categorie = model.categorie;
+			delete[]this->listaMateriiPrime;
+			this->listaMateriiPrime = nullptr;
+			delete[]this->cantitati;
+			this->cantitati = nullptr;
+			if (model.nrMateriiPrime > 0 && model.listaMateriiPrime != nullptr && model.cantitati != nullptr) {
+				this->nrMateriiPrime = model.nrMateriiPrime;
+				this->listaMateriiPrime = new string[this->nrMateriiPrime];
+				this->cantitati = new int[this->nrMateriiPrime];
+				for (int i = 0; i < this->nrMateriiPrime; i++) {
+					this->listaMateriiPrime[i] = model.listaMateriiPrime[i];
+					this->cantitati[i] = model.cantitati[i];
+				}
+			}
+			else {
+				this->nrMateriiPrime = 0;
+				this->listaMateriiPrime = nullptr;
+				this->cantitati = nullptr;
+			}
+		}
+		return *this;
+	}
+
+	~materiiPrime() {
+		delete[]this->listaMateriiPrime;
+		this->listaMateriiPrime = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+	}
+
+	friend ostream& operator<<(ostream& COUT, const materiiPrime& materiiPrimeModel) {
+		COUT << "\n-----------------Informatii materii prime--------------------";
+		COUT << "\nCategorie: " << materiiPrimeModel.categorie;
+		if (materiiPrimeModel.nrMateriiPrime > 0 && materiiPrimeModel.listaMateriiPrime != nullptr && materiiPrimeModel.cantitati != nullptr) {
+			COUT << "\nLista materii prime: ";
+			for (int i = 0; i < materiiPrimeModel.nrMateriiPrime; i++) {
+				COUT << "\nMateria prima " << i + 1 << ": " << materiiPrimeModel.listaMateriiPrime[i] << " ;Cantitate: " << materiiPrimeModel.cantitati[i];
+			}
+		}
+		else {
+			COUT << "\nIn aceasta categorie nu au fost inca inregistrate materii prime.";
+		}
+		return COUT;
+	}
+
+	friend istream& operator>>(istream& CIN, materiiPrime& materiiPrimeModel) {
+		delete[]materiiPrimeModel.listaMateriiPrime;
+		materiiPrimeModel.listaMateriiPrime = nullptr;
+		delete[]materiiPrimeModel.cantitati;
+		materiiPrimeModel.cantitati = nullptr;
+		cout << "\nIntroduceti numarul de materii prime din categoria: " << materiiPrimeModel.categorie << ": ";
+		CIN >> materiiPrimeModel.nrMateriiPrime;
+		if (materiiPrimeModel.nrMateriiPrime > 0) {
+			materiiPrimeModel.listaMateriiPrime = new string[materiiPrimeModel.nrMateriiPrime];
+			materiiPrimeModel.cantitati = new int[materiiPrimeModel.nrMateriiPrime];
+			for (int i = 0; i < materiiPrimeModel.nrMateriiPrime; i++) {
+				cout << "\nMateria prima " << i + 1 << ": ";
+				CIN >> materiiPrimeModel.listaMateriiPrime[i];
+				cout << "\nCantitatea din materia prima " << i + 1 << ": ";
+				CIN >> materiiPrimeModel.cantitati[i];
+			}
+		}
+		else {
+			materiiPrimeModel.nrMateriiPrime = 0;
+			materiiPrimeModel.listaMateriiPrime = nullptr;
+			materiiPrimeModel.cantitati = nullptr;
+		}
+		return CIN;
+	}
+
+	//returneaza indexul la care se gaseste materia prima in lista de materii prime pt a cauta dupa la celasi index in vectorul cantitati, cantitatea materiei prime din [materiePrima]
+	int operator[](string materiePrima) {
+		int contor = 0;
+		for (int i = 0; i < this->nrMateriiPrime; i++) {
+			if (this->listaMateriiPrime[i] == materiePrima)
+				return contor;
+			contor++;
+		}
+	}
+
+	materiiPrime& operator++() {
+		for (int i = 0; i < this->nrMateriiPrime; i++) {
+			this->cantitati[i]++;
+		}
+		return *this;
+	}
+
+	materiiPrime operator++(int) {
+		materiiPrime model = *this;
+		for (int i = 0; i < this->nrMateriiPrime; i++) {
+			this->cantitati[i]++;
+		}
+		return model;
+	}
+};
+
+
+class aperitiv {
+private:
+	materiiPrime materiiPrimeAperitiv;
+	string denumirePreparat;
+	int nrIngrediente;
+	string* ingrediente;
+	int* cantitati;
+	static float pret;
+public:
+	aperitiv(materiiPrime materiiPrimeAperitiv) {
+		this->materiiPrimeAperitiv = materiiPrimeAperitiv;
+		this->denumirePreparat = "";
+		this->nrIngrediente = 0;
+		this->ingrediente = nullptr;
+		this->cantitati = nullptr;
+	}
+
+	aperitiv(materiiPrime materiiPrimeAperitiv, string denumirePreparat, int nrIngrediente, string* ingrediente, int* cantitati) {
+		this->materiiPrimeAperitiv = materiiPrimeAperitiv;
+		this->denumirePreparat = denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+		this->pret = pret;
+	}
+
+	materiiPrime getMateriiprime() {
+		return this->materiiPrimeAperitiv;
+	}
+	void setMateriiPrime(const materiiPrime& model) {
+		this->materiiPrimeAperitiv = model;
+	}
+	string getDenumire() {
+		return this->denumirePreparat;
+	}
+	void setDenumire(string denumirePreparat) {
+		this->denumirePreparat = denumirePreparat;
+	}
+	int getNrIngrediente() {
+		return this->nrIngrediente;
+	}
+	string* getIngrediente() {
+		return this->ingrediente;
+	}
+	int* getCantitati() {
+		return this->cantitati;
+	}
+	float getPret() {
+		return this->pret;
+	}
+	void setIngredientePlusCantitati(int nrIngrediente, string* ingrediente, int* cantitati) {
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+	void afisareInfoAperitiv() {
+		this->materiiPrimeAperitiv.afisareMateriiPrime();
+		cout << "\n-----------------Informatii aperitiv----------------";
+		cout << "\nDenumire: " << this->denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			cout << "\nReteta: ";
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": " << this->ingrediente[i] << " ; Cantitate: " << this->cantitati[i];
+			}
+		}
+		else {
+			cout << "\nNu s-a inregistrat inca reteta pentru acest preparat!";
+		}
+		cout << "\nPret: " << this->pret;
+	}
+	void modificareReteta(int nrIngrediente, string* ingrediente, int* cantitati) {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+	aperitiv(const aperitiv& model) {
+		this->materiiPrimeAperitiv = model.materiiPrimeAperitiv;
+		this->denumirePreparat = model.denumirePreparat;
+		if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+			this->nrIngrediente = model.nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = model.ingrediente[i];
+				this->cantitati[i] = model.cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+
+	aperitiv& operator=(const aperitiv& model) {
+		if (this != &model) {
+			delete[]this->ingrediente;
+			this->ingrediente = nullptr;
+			delete[]this->cantitati;
+			this->cantitati = nullptr;
+			this->denumirePreparat = model.denumirePreparat;
+			if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+				this->nrIngrediente = model.nrIngrediente;
+				this->ingrediente = new string[this->nrIngrediente];
+				this->cantitati = new int[this->nrIngrediente];
+				for (int i = 0; i < this->nrIngrediente; i++) {
+					this->ingrediente[i] = model.ingrediente[i];
+					this->cantitati[i] = model.cantitati[i];
+				}
+			}
+			else {
+				this->nrIngrediente = 0;
+				this->ingrediente = nullptr;
+				this->cantitati = nullptr;
+			}
+			this->pret = model.pret;
+		}
+		return *this;
+	}
+
+	~aperitiv() {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+	}
+	friend ostream& operator<<(ostream& COUT, const aperitiv& aperitiv) {
+		COUT << "\nDenumire preparat: " << aperitiv.denumirePreparat;
+		if (aperitiv.nrIngrediente > 0 && aperitiv.ingrediente != nullptr && aperitiv.cantitati != nullptr) {
+			COUT << "\nIngrediente: ";
+			for (int i = 0; i < aperitiv.nrIngrediente; i++) {
+				COUT << "\nIngredient " << i + 1 << ": " << aperitiv.ingrediente[i] << "; Cantitate: " << aperitiv.cantitati[i];
+			}
+		}
+		else {
+			COUT << "\nInca nu au fost inregistrate ingrediente in aceasta reteta.";
+		}
+		COUT << "\nPret preparat: " << aperitiv.pret;
+		return COUT;
+	}
+	friend istream& operator>>(istream& CIN, aperitiv& aperitiv) {
+		cout << "\nIntroduceti denumirea preparatului: ";
+		CIN >> aperitiv.denumirePreparat;
+		cout << "\nIntroduceti numarul de ingrediente din reteta preparatului: ";
+		CIN >> aperitiv.nrIngrediente;
+		if (aperitiv.nrIngrediente > 0) {
+			aperitiv.ingrediente = new string[aperitiv.nrIngrediente];
+			aperitiv.cantitati = new int[aperitiv.nrIngrediente];
+			for (int i = 0; i < aperitiv.nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": ";
+				CIN >> aperitiv.ingrediente[i];
+				cout << "\nCantitate ingredient " << i + 1 << ": ";
+				CIN >> aperitiv.cantitati[i];
+			}
+		}
+		else {
+			aperitiv.ingrediente = 0;
+			aperitiv.ingrediente = nullptr;
+			aperitiv.cantitati = nullptr;
+		}
+		return CIN;
+	}
+	bool verificareMateriiPrime() {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = this->materiiPrimeAperitiv[this->ingrediente[i]];
+			if (this->cantitati[i] > this->materiiPrimeAperitiv.getCantitati()[index]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	void actualizareMateriiPrime(materiiPrime& materiiPrime) {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = materiiPrime[this->ingrediente[i]];
+			materiiPrime.getCantitati()[index] -= this->cantitati[i];
+		}
+	}
+};
+float aperitiv::pret = 23;
+class felPrincipal {
+private:
+	materiiPrime materiiPrimeFelPrincipal;
+	string denumirePreparat;
+	int nrIngrediente;
+	string* ingrediente;
+	int* cantitati;
+	float pret;
+public:
+	felPrincipal(materiiPrime materiiPrimeFelPrincipal) {
+		this->materiiPrimeFelPrincipal = materiiPrimeFelPrincipal;
+		this->denumirePreparat = "";
+		this->nrIngrediente = 0;
+		this->ingrediente = nullptr;
+		this->cantitati = nullptr;
+		this->pret = 0;
+	}
+	felPrincipal(materiiPrime materiiPrimeFelPrincipal, string denumirePreparat, int nrIngrediente, string* ingrediente, int* cantitati, float pret) {
+		this->materiiPrimeFelPrincipal = materiiPrimeFelPrincipal;
+		this->denumirePreparat = denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+		this->pret = pret;
+	}
+	materiiPrime getMateriiPrime() {
+		return this->materiiPrimeFelPrincipal;
+	}
+	string getDenumirePreparat() {
+		return this->denumirePreparat;
+	}
+	int getNrIngrediente() {
+		return this->nrIngrediente;
+	}
+	string* getListIngrediente() {
+		return this->ingrediente;
+	}
+	int* getCantitati() {
+		return this->cantitati;
+	}
+	float getPret() {
+		return this->pret;
+	}
+	void  setDenumirePreparat(string denumirePreparat) {
+		this->denumirePreparat = denumirePreparat;
+	}
+	void setIngredientePlusCantitati(int nrIngrediente, string* ingrediente, int* cantitati) {
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+	void setPret(float pret) {
+		this->pret = pret;
+	}
+
+	void afisareInformatiiFelPrincipal() {
+		this->materiiPrimeFelPrincipal.afisareMateriiPrime();
+		cout << "\n----------------Informatii preparat----------------------";
+		cout << "\nDenumire: " << this->denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			cout << "\nReteta: ";
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": " << this->ingrediente[i] << " ; Cantitate: " << this->cantitati[i];
+			}
+		}
+		else {
+			cout << "\nNu s-a inregistrat inca reteta pentru acest preparat!";
+		}
+		cout << "\nPret: " << this->pret;
+	}
+
+	void modificareReteta(int nrIngrediente, string* ingrediente, int* cantitati) {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+
+	felPrincipal(const felPrincipal& model) {
+		this->materiiPrimeFelPrincipal = model.materiiPrimeFelPrincipal;
+		this->denumirePreparat = model.denumirePreparat;
+		if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+			this->nrIngrediente = model.nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = model.ingrediente[i];
+				this->cantitati[i] = model.cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+		this->pret = model.pret;
+	}
+
+	felPrincipal& operator=(const felPrincipal& model) {
+		if (this != &model) {
+			delete[]this->ingrediente;
+			this->ingrediente = nullptr;
+			delete[]this->cantitati;
+			this->cantitati = nullptr;
+			this->denumirePreparat = model.denumirePreparat;
+			if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+				this->nrIngrediente = model.nrIngrediente;
+				this->ingrediente = new string[this->nrIngrediente];
+				this->cantitati = new int[this->nrIngrediente];
+				for (int i = 0; i < this->nrIngrediente; i++) {
+					this->ingrediente[i] = model.ingrediente[i];
+					this->cantitati[i] = model.cantitati[i];
+				}
+			}
+			else {
+				this->nrIngrediente = 0;
+				this->ingrediente = nullptr;
+				this->cantitati = nullptr;
+			}
+			this->pret = model.pret;
+		}
+		return *this;
+	}
+
+	~felPrincipal() {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+	}
+
+	friend ostream& operator<<(ostream& COUT, const felPrincipal& Principal) {
+		COUT << "\nDenumire preparat: " << Principal.denumirePreparat;
+		if (Principal.nrIngrediente > 0 && Principal.ingrediente != nullptr && Principal.cantitati != nullptr) {
+			COUT << "\nIngrediente: ";
+			for (int i = 0; i < Principal.nrIngrediente; i++) {
+				COUT << "\nIngredient " << i + 1 << ": " << Principal.ingrediente[i] << "; Cantitate: " << Principal.cantitati[i];
+			}
+		}
+		else {
+			COUT << "\nInca nu au fost inregistrate ingrediente in aceasta reteta.";
+		}
+		COUT << "\nPret preparat: " << Principal.pret;
+		return COUT;
+	}
+
+	friend istream& operator>>(istream& CIN, felPrincipal& Principal) {
+		cout << "\nIntroduceti denumirea preparatului: ";
+		CIN >> Principal.denumirePreparat;
+		cout << "\nIntroduceti numarul de ingrediente din reteta preparatului: ";
+		CIN >> Principal.nrIngrediente;
+		if (Principal.nrIngrediente > 0) {
+			Principal.ingrediente = new string[Principal.nrIngrediente];
+			Principal.cantitati = new int[Principal.nrIngrediente];
+			for (int i = 0; i < Principal.nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": ";
+				CIN >> Principal.ingrediente[i];
+				cout << "\nCantitate ingredient " << i + 1 << ": ";
+				CIN >> Principal.cantitati[i];
+			}
+		}
+		else {
+			Principal.ingrediente = 0;
+			Principal.ingrediente = nullptr;
+			Principal.cantitati = nullptr;
+		}
+		cout << "\nIntroduceti pretul preparatului: ";
+		CIN >> Principal.pret;
+		return CIN;
+	}
+	bool verificareMateriiPrime() {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = this->materiiPrimeFelPrincipal[this->ingrediente[i]];
+			if (this->cantitati[i] > this->materiiPrimeFelPrincipal.getCantitati()[index]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	void actualizareMateriiPrime(materiiPrime& materiiPrime) {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = materiiPrime[this->ingrediente[i]];
+			materiiPrime.getCantitati()[index] -= this->cantitati[i];
+		}
+	}
+};
+
+class desert {
+private:
+	materiiPrime materiiPrimeDesert;
+	string denumirePreparat;
+	int nrIngrediente;
+	string* ingrediente;
+	int* cantitati;
+	float pret;
+public:
+	desert(materiiPrime materiiPrimeDesert) {
+		this->materiiPrimeDesert = materiiPrimeDesert;
+		this->denumirePreparat = "";
+		this->nrIngrediente = 0;
+		this->ingrediente = nullptr;
+		this->cantitati = nullptr;
+		this->pret = 0;
+	}
+	desert(materiiPrime materiiPrimeDesert, string denumirePreparat, int nrIngrediente, string* ingrediente, int* cantitati, float pret) {
+		this->materiiPrimeDesert = materiiPrimeDesert;
+		this->denumirePreparat = denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+		this->pret = pret;
+	}
+
+	materiiPrime getMateriiPrime() {
+		return this->materiiPrimeDesert;
+	}
+	string getDenumirePreparat() {
+		return this->denumirePreparat;
+	}
+	int getNrIngrediente() {
+		return this->nrIngrediente;
+	}
+	string* getListIngrediente() {
+		return this->ingrediente;
+	}
+	int* getCantitati() {
+		return this->cantitati;
+	}
+	float getPret() {
+		return this->pret;
+	}
+	void  setDenumirePreparat(string denumirePreparat) {
+		this->denumirePreparat = denumirePreparat;
+	}
+	void setIngredientePlusCantitati(int nrIngrediente, string* ingrediente, int* cantitati) {
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+	void setPret(float pret) {
+		this->pret = pret;
+	}
+
+	void afisareInformatiiDesert() {
+		this->materiiPrimeDesert.afisareMateriiPrime();
+		cout << "\n----------------Informatii preparat----------------------";
+		cout << "\nDenumire: " << this->denumirePreparat;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			cout << "\nReteta: ";
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": " << this->ingrediente[i] << " ; Cantitate: " << this->cantitati[i];
+			}
+		}
+		else {
+			cout << "\nNu s-a inregistrat inca reteta pentru acest preparat!";
+		}
+		cout << "\nPret: " << this->pret;
+	}
+
+	void modificareReteta(int nrIngrediente, string* ingrediente, int* cantitati) {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+		if (nrIngrediente > 0 && ingrediente != nullptr && cantitati != nullptr) {
+			this->nrIngrediente = nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+				this->cantitati[i] = cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+	}
+
+	desert(const desert& model) {
+		this->materiiPrimeDesert = model.materiiPrimeDesert;
+		this->denumirePreparat = model.denumirePreparat;
+		if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+			this->nrIngrediente = model.nrIngrediente;
+			this->ingrediente = new string[this->nrIngrediente];
+			this->cantitati = new int[this->nrIngrediente];
+			for (int i = 0; i < this->nrIngrediente; i++) {
+				this->ingrediente[i] = model.ingrediente[i];
+				this->cantitati[i] = model.cantitati[i];
+			}
+		}
+		else {
+			this->nrIngrediente = 0;
+			this->ingrediente = nullptr;
+			this->cantitati = nullptr;
+		}
+		this->pret = model.pret;
+	}
+	desert& operator=(const desert& model) {
+		if (this != &model) {
+			delete[]this->ingrediente;
+			this->ingrediente = nullptr;
+			delete[]this->cantitati;
+			this->cantitati = nullptr;
+			this->denumirePreparat = model.denumirePreparat;
+			if (model.nrIngrediente > 0 && model.ingrediente != nullptr && model.cantitati != nullptr) {
+				this->nrIngrediente = model.nrIngrediente;
+				this->ingrediente = new string[this->nrIngrediente];
+				this->cantitati = new int[this->nrIngrediente];
+				for (int i = 0; i < this->nrIngrediente; i++) {
+					this->ingrediente[i] = model.ingrediente[i];
+					this->cantitati[i] = model.cantitati[i];
+				}
+			}
+			else {
+				this->nrIngrediente = 0;
+				this->ingrediente = nullptr;
+				this->cantitati = nullptr;
+			}
+			this->pret = model.pret;
+		}
+		return *this;
+	}
+
+	~desert() {
+		delete[]this->ingrediente;
+		this->ingrediente = nullptr;
+		delete[]this->cantitati;
+		this->cantitati = nullptr;
+	}
+	friend ostream& operator<<(ostream& COUT, const desert& desert) {
+		COUT << "\nDenumire preparat: " << desert.denumirePreparat;
+		if (desert.nrIngrediente > 0 && desert.ingrediente != nullptr && desert.cantitati != nullptr) {
+			COUT << "\nIngrediente: ";
+			for (int i = 0; i < desert.nrIngrediente; i++) {
+				COUT << "\nIngredient " << i + 1 << ": " << desert.ingrediente[i] << "; Cantitate: " << desert.cantitati[i];
+			}
+		}
+		else {
+			COUT << "\nInca nu au fost inregistrate ingrediente in aceasta reteta.";
+		}
+		COUT << "\nPret preparat: " << desert.pret;
+		return COUT;
+	}
+	friend istream& operator>>(istream& CIN, desert& desert) {
+		cout << "\nIntroduceti denumirea preparatului: ";
+		CIN >> desert.denumirePreparat;
+		cout << "\nIntroduceti numarul de ingrediente din reteta preparatului: ";
+		CIN >> desert.nrIngrediente;
+		if (desert.nrIngrediente > 0) {
+			desert.ingrediente = new string[desert.nrIngrediente];
+			desert.cantitati = new int[desert.nrIngrediente];
+			for (int i = 0; i < desert.nrIngrediente; i++) {
+				cout << "\nIngredient " << i + 1 << ": ";
+				CIN >> desert.ingrediente[i];
+				cout << "\nCantitate ingredient " << i + 1 << ": ";
+				CIN >> desert.cantitati[i];
+			}
+		}
+		else {
+			desert.ingrediente = 0;
+			desert.ingrediente = nullptr;
+			desert.cantitati = nullptr;
+		}
+		cout << "\nIntroduceti pretul preparatului: ";
+		CIN >> desert.pret;
+		return CIN;
+	}
+	bool verificareMateriiPrime() {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = this->materiiPrimeDesert[this->ingrediente[i]];
+			if (this->cantitati[i] > this->materiiPrimeDesert.getCantitati()[index]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void actualizareMateriiPrime(materiiPrime& materiiPrime) {
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int index = materiiPrime[this->ingrediente[i]];
+			materiiPrime.getCantitati()[index] -= this->cantitati[i];
+		}
+	}
+};
+
+int main() {
+
+	//materii prime
+	string materiiPrimeAperitivList[] = { "pui", "ceapa", "oua", "usturoi", "patrunjel", "sunca", "cascaval", "malai", "branza", "carnati","bagheta", "rosii", "ulei" };
+	int materiiPrimeAperitivCantitati[] = { 45000, 100, 200, 50, 30, 2000, 1500, 12000, 3000, 200, 50, 200, 500 };
+	materiiPrime materiiPrimeAperitiv("Materii prime aperitiv", 13, materiiPrimeAperitivList, materiiPrimeAperitivCantitati);
+
+	string materiiPrimeFelPrincipalList[] = { "paste", "oua", "parmezan","faina", "sunca", "mozzarela", "masline", "chifle", "vita", "ceapa", "maioneza" };
+	int materiiPrimeFelPrincipalCantitati[] = { 12000, 100, 1000, 15000, 2000, 1500, 500, 100, 3000, 40, 1400 };
+	materiiPrime materiiPrimeFelPrincipal("Materii prime fel principal", 11, materiiPrimeFelPrincipalList, materiiPrimeFelPrincipalCantitati);
+
+	string materiiPrimeDesertList[] = { "faina", "nutela", "oua","lapte", "drojdie", "ulei", "gem" };
+	int materiiPrimeDesertCantitati[] = { 25000, 2000, 200, 2000, 500, 1000, 700 };
+	materiiPrime materiiPrimeDesert("Materii prime desert", 7, materiiPrimeDesertList, materiiPrimeDesertCantitati);
+
+	//aperitive
+	string ingredienteChiftele[] = { "pui", "ceapa", "oua", "usturoi", "malai" };
+	int ingredienteChifteleCantitati[] = { 200, 1, 3, 1, 1 };
+	aperitiv Chiftele(materiiPrimeAperitiv, "Chiftele", 5, ingredienteChiftele, ingredienteChifteleCantitati);
+
+	string ingredienteOmleta[] = { "oua", "sunca", "cascaval" };
+	int ingredienteOmletaCantitati[] = { 4, 100, 70 };
+	aperitiv Omleta(materiiPrimeAperitiv, "Omleta", 3, ingredienteOmleta, ingredienteOmletaCantitati);
+
+	string ingredienteBulz[] = { "malai", "branza", "oua", "carnati" };
+	int ingredienteBulzCantitati[] = { 100, 50, 2, 1 };
+	aperitiv Bulz(materiiPrimeAperitiv, "Bulz", 4, ingredienteBulz, ingredienteBulzCantitati);
+
+	string ingredienteBruschete[] = { "bagheta", "rosii", "ulei" };
+	int ingredienteBruscheteCantitati[] = { 1, 2, 10 };
+	aperitiv Bruschete(materiiPrimeAperitiv, "Bruschete", 3, ingredienteBruschete, ingredienteBruscheteCantitati);
+
+	//Fel principal
+
+	string ingredienteCarbonara[] = { "paste", "oua", "parmezan" };
+	int ingredienteCarbonaraCantitati[] = { 100, 2, 30 };
+	felPrincipal Carbonara(materiiPrimeFelPrincipal, "Carbonara", 3, ingredienteCarbonara, ingredienteCarbonaraCantitati, 60);
+
+	string ingredientePizza[] = { "faina", "sunca", "mozzarela", "masline" };
+	int ingredientePizzaCantitati[] = { 100, 150, 100, 45 };
+	felPrincipal Pizza(materiiPrimeFelPrincipal, "Pizza", 4, ingredientePizza, ingredientePizzaCantitati, 55);
+
+	string ingredienteBurger[] = { "vita", "chifla", "maioneza", "ceapa" };
+	int ingredienteBurgerCantitati[] = { 150, 1, 50, 1 };
+	felPrincipal Burger(materiiPrimeFelPrincipal, "Burger", 4, ingredienteBurger, ingredienteBurgerCantitati, 80);
+
+	//Desert
+
+	string ingredienteClatite[] = { "faina", "nutela", "oua", "lapte" };
+	int ingredienteClatiteCantitati[] = { 120, 70, 4, 100 };
+	desert Clatite(materiiPrimeDesert, "Clatite", 4, ingredienteClatite, ingredienteClatiteCantitati, 25);
+
+	string ingredientePapanasi[] = { "faina", "drojdie", "ulei", "gem" };
+	int ingredientePapanasiCantitati[] = { 200, 10, 10, 60 };
+	desert Papanasi(materiiPrimeDesert, "Papanasi", 4, ingredientePapanasi, ingredientePapanasiCantitati, 30);
+
+	int nrMasa;
+	int nrPreparate;
+
+	cout << "---------------------------------------Meniu----------------------------------------";
+	cout << "\n            Aperitive                                      Fel Principal";
+	cout << "\n            ---------                                      -------------";
+	cout << "\n           1.Chiftele                                      5.Carbonara";
+	cout << "\n           2.Omleta                                        6.Pizza";
+	cout << "\n           3.Bulz                                          7.Burger";
+	cout << "\n           4.Bruschete";
+	cout << "\n                                     Desert";
+	cout << "\n                                    8.Clatite";
+	cout << "\n                                    9.Papanasi";
+	cout << endl << endl << endl;
+	cout << "\nIntroduceti numarul mesei la care va fi inregistrata comanda: ";
+	cin >> nrMasa;
+	Comanda comanda1(nrMasa);
+	cout << "Introduceti numarul de produse pe care doriti sa il comandati: ";
+	cin >> nrPreparate;
+	int copieNrPreparate = nrPreparate;
+	while (nrPreparate > 0) {
+		cout << "\nIntroduceti cifra corespunzatoare produsului pe care doriti sa il comandati: ";
+		int numarPreparat;
+		cin >> numarPreparat;
+		switch (numarPreparat)
+		{
+		case 1:
+			if (Chiftele.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Chiftele.actualizareMateriiPrime(materiiPrimeAperitiv);
+				nrPreparate--;
+				comanda1 + Chiftele.getPret();
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 2:
+			if (Omleta.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Omleta.actualizareMateriiPrime(materiiPrimeAperitiv);
+				nrPreparate--;
+				comanda1 + Omleta.getPret();
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 3:
+			if (Bulz.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Bulz.actualizareMateriiPrime(materiiPrimeAperitiv);
+				comanda1 + Bulz.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 4:
+			if (Bruschete.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Bruschete.actualizareMateriiPrime(materiiPrimeAperitiv);
+				comanda1 + Bruschete.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 5:
+			if (Carbonara.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Carbonara.actualizareMateriiPrime(materiiPrimeFelPrincipal);
+				comanda1 + Carbonara.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 6:
+			if (Pizza.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Pizza.actualizareMateriiPrime(materiiPrimeFelPrincipal);
+				comanda1 + Pizza.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 7:
+			if (Burger.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Burger.actualizareMateriiPrime(materiiPrimeFelPrincipal);
+				comanda1 + Burger.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 8:
+			if (Clatite.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Clatite.actualizareMateriiPrime(materiiPrimeDesert);
+				comanda1 + Clatite.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		case 9:
+			if (Papanasi.verificareMateriiPrime()) {
+				cout << "\Produsul a fost adaugat.";
+				Papanasi.actualizareMateriiPrime(materiiPrimeDesert);
+				comanda1 + Papanasi.getPret();
+				nrPreparate--;
+			}
+			else {
+				cout << "\Ne cerem scuze dar momentan produsul dorit nu este disponibil va rugam sa introduceti alt produs: ";
+			}
+			break;
+		}
+	}
+	cout << endl << "\nComanda de la masa cu numarul " << nrMasa << " a fost plasata cu succes.Este alcatuita din " << copieNrPreparate << " preparate si costul total al comenzii este de " << comanda1.getCostComanda() << " lei!";
+
+
+	cout << endl << endl << endl << endl << endl;
+}
